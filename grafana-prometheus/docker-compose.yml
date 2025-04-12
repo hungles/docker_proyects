@@ -6,7 +6,7 @@ volumes:
 
 services:
   grafana:
-    image: grafana/grafana:8.0.6
+    image: grafana/grafana:latest
     container_name: grafana
     restart: unless-stopped
     volumes:
@@ -15,7 +15,7 @@ services:
     - 3000:3000
 
   prometheus:
-    image: prom/prometheus:v2.28.1
+    image: prom/prometheus:latest
     container_name: prometheus
     restart: unless-stopped
     volumes:
@@ -34,9 +34,9 @@ services:
     container_name: node_exporter
     restart: unless-stopped
     ports:
-    - 9100:9100
+      - 9100:9100
     command:
-    - '--path.rootfs=/host'
+      - '--path.rootfs=/host'
     pid: host
     volumes:
       - '/:/host:ro,rslave'
@@ -59,3 +59,9 @@ services:
     restart: unless-stopped
     ports:
     - 8080:8080
+
+  web-server:
+    image: nginx:latest
+    container_name: web-server
+    ports:
+      - 8081:8080
