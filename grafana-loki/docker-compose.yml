@@ -21,23 +21,30 @@ services:
     container_name: loki
     restart: unless-stopped
     volumes:
-      - ./loki-config.yaml:/etc/loki/loki-config.yaml
       - loki-data:/loki
     ports:
       - "3100:3100"
-    command: -config.file=/etc/loki/loki-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
 
   promtail:
     image: grafana/promtail:latest
     container_name: promtail
-    restart: unless-stopped
     volumes:
-      - /root/:/root_user:ro
-      - /home:/home_server:ro
-      - /var/log:/var/log:ro
-      - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml
-      - promtail-data:/tmp
-    command: -config.file=/etc/promtail/promtail-config.yaml
+      - /var/log:/var/log
+      - /etc/machine-id:/etc/machine-id:ro
+      - ./promtail-config.yaml:/etc/promtail/promtail.yaml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/promtail.yaml
+    depends_on:
+      - loki
+  
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8080:80"
+    restart: unless-stopped
 
   
     
