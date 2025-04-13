@@ -1,0 +1,27 @@
+version: "2.2"
+
+services:
+  
+  loadbalancer:
+    image: nginx:latest
+    container_name: lb-01
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 8080:80
+  webserver1:
+    image: nginx:latest
+    container_name: wb-01
+    volumes:
+      - ./pages/index1.html:/usr/share/nginx/html/index.html
+  webserver2:
+    image: nginx:latest
+    container_name: wb-02
+    volumes:
+      - ./pages/index2.html:/usr/share/nginx/html/index.html
+  
+  webserver3:
+    image: nginx:latest
+    container_name: wb-03
+    volumes:
+      - ./pages/index3.html:/usr/share/nginx/html/index.html
