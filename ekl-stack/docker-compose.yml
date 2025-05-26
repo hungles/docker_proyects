@@ -175,6 +175,6 @@ services:
     image: docker.elastic.co/elastic-agent/elastic-agent:8.17.0
     container_name: elastic-agent
     volumes:
-      - ./elastic-agent.yml:/usr/share/elastic-agent
+      - ./elastic-agent.yml:/usr/share/elastic-agent/elastic-agent.yml
   
   
