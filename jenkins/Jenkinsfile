@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "mi-app"
+        TAG = "latest"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'REPO_GIT'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                cd client-panel/local/frontend
+                docker version
+                docker build -t ${IMAGE_NAME}:${TAG} .
+                '''
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                sh 'docker run -d -p 8081:5000 --name mi-app-container ${IMAGE_NAME}:${TAG}'
+            }
+        }
+    }
+
+    post {
+        always {
+            sh 'docker ps -a'
+        }
+    }
+}
